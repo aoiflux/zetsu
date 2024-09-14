@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"zetsu/ast"
+	"zetsu/builtin"
 	"zetsu/code"
 	"zetsu/object"
 )
@@ -39,7 +40,7 @@ func New() *Compiler {
 	}
 
 	table := NewSymbolTable()
-	for i, v := range object.Builtins {
+	for i, v := range builtin.Builtins {
 		table.DefineBuiltin(i, v.Name)
 	}
 

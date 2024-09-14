@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"os/user"
 	"runtime"
+	"zetsu/builtin"
 	"zetsu/compiler"
 	"zetsu/errrs"
 	"zetsu/global"
@@ -19,16 +20,18 @@ import (
 )
 
 const banner = `
-=======================================
-                  _              _
-                 | |            | |
-  _ __ ___  _   _| |_ __ _ _ __ | |_
- | '_ ' _ \| | | | __/ _' | '_ \| __|
- | | | | | | |_| | || (_| | | | | |_
- |_| |_| |_|\__,_|\__\__,_|_| |_|\__|
-
-
-=======================================
+==========================================
+▒███████▒▓█████▄▄▄█████▓  ██████  █    ██
+▒ ▒ ▒ ▄▀░▓█   ▀▓  ██▒ ▓▒▒██    ▒  ██  ▓██▒
+░ ▒ ▄▀▒░ ▒███  ▒ ▓██░ ▒░░ ▓██▄   ▓██  ▒██░
+  ▄▀▒   ░▒▓█  ▄░ ▓██▓ ░   ▒   ██▒▓▓█  ░██░
+▒███████▒░▒████▒ ▒██▒ ░ ▒██████▒▒▒▒█████▓
+░▒▒ ▓░▒░▒░░ ▒░ ░ ▒ ░░   ▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒
+░░▒ ▒ ░ ▒ ░ ░  ░   ░    ░ ░▒  ░ ░░░▒░ ░ ░
+░ ░ ░ ░ ░   ░    ░      ░  ░  ░   ░░░ ░ ░
+  ░ ░       ░  ░              ░     ░
+░
+==========================================
 `
 
 // PROMPT is the constant for showing REPL prompt
@@ -44,7 +47,7 @@ func Start(in io.Reader, out io.Writer) {
 	constants := []object.Object{}
 	globals := make([]object.Object, global.GlobalSize)
 	symbolTable := compiler.NewSymbolTable()
-	for i, v := range object.Builtins {
+	for i, v := range builtin.Builtins {
 		symbolTable.DefineBuiltin(i, v.Name)
 	}
 
@@ -97,7 +100,7 @@ func welcome() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Hello %s! Welcome to mutant, a programming language!\n", user.Name)
+	fmt.Printf("Hello %s! Let's investigate with zetsu\n", user.Name)
 	fmt.Printf("Please get started by using this REPL")
 }
 

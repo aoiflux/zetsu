@@ -1,15 +1,16 @@
-package object
+package builtin
 
 import (
 	"fmt"
 	"reflect"
+	"zetsu/object"
 )
 
-type BuiltinFunction func(args ...Object) Object
+type BuiltinFunction func(args ...object.Object) object.Object
 type BuiltIn struct{ Fn BuiltinFunction }
 
-func (b *BuiltIn) Type() ObjectType { return BUILTIN_OBJ }
-func (b *BuiltIn) Inspect() string  { return "builtin funciton" }
+func (b *BuiltIn) Type() object.ObjectType { return object.BUILTIN_OBJ }
+func (b *BuiltIn) Inspect() string         { return "builtin funciton" }
 
 var Builtins = []struct {
 	Name    string
@@ -18,25 +19,13 @@ var Builtins = []struct {
 	{
 		Name: "len",
 		Builtin: &BuiltIn{
-			Fn: func(args ...Object) Object {
-				if len(args) != 1 {
-					return newError("wrong number of arguments. got=%d, want=1", len(args))
-				}
-				switch arg := args[0].(type) {
-				case *Array:
-					return &Integer{Value: int64(len(arg.Elements))}
-				case *String:
-					return &Integer{Value: int64(len(arg.Value))}
-				default:
-					return newError("argument to `len` not supported, got %s", args[0].Type())
-				}
-			},
+			Fn: nil,
 		},
 	},
 	{
 		Name: "puts",
 		Builtin: &BuiltIn{
-			Fn: func(args ...Object) Object {
+			Fn: func(args ...object.Object) object.Object {
 				for _, arg := range args {
 					fmt.Print(arg.Inspect())
 				}
@@ -47,7 +36,7 @@ var Builtins = []struct {
 	{
 		Name: "putln",
 		Builtin: &BuiltIn{
-			Fn: func(args ...Object) Object {
+			Fn: func(args ...object.Object) object.Object {
 				for _, arg := range args {
 					fmt.Println(arg.Inspect())
 				}
@@ -58,7 +47,7 @@ var Builtins = []struct {
 	{
 		Name: "gets",
 		Builtin: &BuiltIn{
-			Fn: func(args ...Object) Object {
+			Fn: func(args ...object.Object) object.Object {
 				if len(args) != 1 {
 					return newError("wrong number of arguments. got=%d, want=1", len(args))
 				}
@@ -67,7 +56,7 @@ var Builtins = []struct {
 					return newError("argument to function is nil :/")
 				}
 
-				if args[0].Type() == STRING_OBJ {
+				if args[0].Type() == object.STRING_OBJ {
 					switch args[0].Inspect() {
 					case "boolean":
 						fallthrough
@@ -80,7 +69,7 @@ var Builtins = []struct {
 						if _, err := fmt.Scanln(&in); err != nil {
 							return newError("input does not match declared data type")
 						}
-						return &Boolean{Value: in}
+						return &object.Boolean{Value: in}
 					case "integer":
 						fallthrough
 					case "int":
@@ -92,7 +81,7 @@ var Builtins = []struct {
 						if _, err := fmt.Scanln(&in); err != nil {
 							return newError("input does not match declared data type")
 						}
-						return &Integer{Value: in}
+						return &object.Integer{Value: in}
 					case "string":
 						fallthrough
 					case "str":
@@ -104,7 +93,7 @@ var Builtins = []struct {
 						if _, err := fmt.Scanln(&in); err != nil {
 							return newError("input does not match declared data type")
 						}
-						return &String{Value: in}
+						return &object.String{Value: in}
 					default:
 						return nil
 					}
@@ -117,16 +106,16 @@ var Builtins = []struct {
 	{
 		Name: "first",
 		Builtin: &BuiltIn{
-			Fn: func(args ...Object) Object {
+			Fn: func(args ...object.Object) object.Object {
 				if len(args) != 1 {
 					return newError("wrong number of arguments. got=%d, want=1", len(args))
 				}
 
-				if args[0].Type() != ARRAY_OBJ {
+				if args[0].Type() != object.ARRAY_OBJ {
 					return newError("argument to `first` must be ARRAY, got %s", args[0].Type())
 				}
 
-				arr := args[0].(*Array)
+				arr := args[0].(*object.Array)
 				if len(arr.Elements) > 0 {
 					return arr.Elements[0]
 				}
@@ -138,16 +127,16 @@ var Builtins = []struct {
 	{
 		Name: "last",
 		Builtin: &BuiltIn{
-			Fn: func(args ...Object) Object {
+			Fn: func(args ...object.Object) object.Object {
 				if len(args) != 1 {
 					return newError("wrong number of arguments. got=%d, want=1", len(args))
 				}
 
-				if args[0].Type() != ARRAY_OBJ {
+				if args[0].Type() != object.ARRAY_OBJ {
 					return newError("argument to `last` must be ARRAY, got %s", args[0].Type())
 				}
 
-				arr := args[0].(*Array)
+				arr := args[0].(*object.Array)
 				length := len(arr.Elements)
 				if length > 0 {
 					return arr.Elements[length-1]
@@ -160,20 +149,20 @@ var Builtins = []struct {
 	{
 		Name: "rest",
 		Builtin: &BuiltIn{
-			Fn: func(args ...Object) Object {
+			Fn: func(args ...object.Object) object.Object {
 				if len(args) != 1 {
 					return newError("wrong number of arguments. got=%d, want=1", len(args))
 				}
-				if args[0].Type() != ARRAY_OBJ {
+				if args[0].Type() != object.ARRAY_OBJ {
 					return newError("argument to `rest` must be ARRAY, got=%s", args[0].Type())
 				}
 
-				arr := args[0].(*Array)
+				arr := args[0].(*object.Array)
 				length := len(arr.Elements)
 				if length > 1 {
-					newElements := make([]Object, length-1, length-1)
+					newElements := make([]object.Object, length-1, length-1)
 					copy(newElements, arr.Elements[1:length])
-					return &Array{Elements: newElements}
+					return &object.Array{Elements: newElements}
 				}
 				return nil
 			},
@@ -182,23 +171,23 @@ var Builtins = []struct {
 	{
 		Name: "push",
 		Builtin: &BuiltIn{
-			Fn: func(args ...Object) Object {
+			Fn: func(args ...object.Object) object.Object {
 				if len(args) != 2 {
 					return newError("wrong number of arguments. got=%d, want=2", len(args))
 				}
 
-				if args[0].Type() != ARRAY_OBJ {
+				if args[0].Type() != object.ARRAY_OBJ {
 					return newError("argument to `push` must be ARRAY, got=%s", args[0].Type())
 				}
 
-				arr := args[0].(*Array)
+				arr := args[0].(*object.Array)
 				length := len(arr.Elements)
 
-				newElements := make([]Object, length+1, length+1)
+				newElements := make([]object.Object, length+1, length+1)
 				copy(newElements, arr.Elements)
 				newElements[length] = args[1]
 
-				return &Array{Elements: newElements}
+				return &object.Array{Elements: newElements}
 			},
 		},
 	},
@@ -213,6 +202,6 @@ func GetBuiltinByName(name string) *BuiltIn {
 	return nil
 }
 
-func newError(format string, a ...interface{}) *Error {
-	return &Error{Message: fmt.Sprintf(format, a...)}
+func newError(format string, a ...interface{}) *object.Error {
+	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }

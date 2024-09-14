@@ -24,32 +24,32 @@ func main() {
 		if os.Args[1] == "-h" || os.Args[1] == "--help" {
 			fmt.Println("zetsu - an open source, secure by default programming language")
 			fmt.Println()
-			fmt.Println("USAGE: mutant COMMAND [OPTIONS...]")
+			fmt.Println("USAGE: zetsu COMMAND [OPTIONS...]")
 
 			fmt.Println("Options:")
 
-			fmt.Println("\tmutant")
-			fmt.Println("\t\tRun mutant in REPL mode.")
+			fmt.Println("\tzetsu")
+			fmt.Println("\t\tRun zetsu in REPL mode.")
 			fmt.Println()
 
-			fmt.Println("\tmutant -h, --help")
+			fmt.Println("\tzetsu -h, --help")
 			fmt.Println("\t\tShow this help message.")
 			fmt.Println()
 
-			fmt.Println("\tmutant -v, --version")
+			fmt.Println("\tzetsu -v, --version")
 			fmt.Println("\t\tShow version information.")
 			fmt.Println()
 
-			fmt.Println("\tmutant <FILENAME>.mut")
-			fmt.Println("\t\tCompile mutant source code into mutant bytecode.")
+			fmt.Println("\tzetsu <FILENAME>.mut")
+			fmt.Println("\t\tCompile zetsu source code into zetsu bytecode.")
 			fmt.Println()
 
-			fmt.Println("\tmutant <FILENAME>.mu")
-			fmt.Println("\t\tRun mutant bytecode using mutant VM.")
+			fmt.Println("\tzetsu <FILENAME>.mu")
+			fmt.Println("\t\tRun zetsu bytecode using zetsu VM.")
 			fmt.Println()
 
-			fmt.Println("\tmutant release -src <FILENAME>.mut [-os | -arch]")
-			fmt.Println("\t\tCompile mutant source code into standalone, independent binary executable.")
+			fmt.Println("\tzetsu release -src <FILENAME>.mut [-os | -arch]")
+			fmt.Println("\t\tCompile zetsu source code into standalone, independent binary executable.")
 			fmt.Println("")
 			fmt.Println("\t\tPossible values for -os: darwin | linux | windows.")
 			fmt.Println("\t\tPossible values for -arch: amd64 | arm64 | arm | 386 | x86. (386 & x86 have same meaning here)")
@@ -62,12 +62,12 @@ func main() {
 			return
 		}
 
-		if strings.HasSuffix(os.Args[1], global.MutantSourceCodeFileExtention) {
+		if strings.HasSuffix(os.Args[1], global.ZetsuSourceCodeFileExtention) {
 			cli.CompileCode(os.Args[1], "", "", false)
 			return
 		}
 
-		if strings.HasSuffix(os.Args[1], global.MutantByteCodeCompiledFileExtension) {
+		if strings.HasSuffix(os.Args[1], global.ZetsuByteCodeCompiledFileExtension) {
 			cli.RunCode(os.Args[1])
 			return
 		}
@@ -105,8 +105,8 @@ func prepareRelease(args []string) (string, string, string, error) {
 			return "", "", "", errors.New("zetsu source code file path is required, please use -src flag")
 		}
 
-		if !strings.HasSuffix(src, global.MutantSourceCodeFileExtention) {
-			return "", "", "", errors.New("incorrect file extension, this program only works for mutant source code files")
+		if !strings.HasSuffix(src, global.ZetsuSourceCodeFileExtention) {
+			return "", "", "", errors.New("incorrect file extension, this program only works for zetsu source code files")
 		}
 
 		absSrc, err := filepath.Abs(src)

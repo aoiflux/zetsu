@@ -31,7 +31,7 @@ func CompileCode(src, goos, goarch string, release bool) {
 		fmt.Println(err)
 		return
 	}
-	dstpath := strings.TrimSuffix(srcpath, global.MutantSourceCodeFileExtention)
+	dstpath := strings.TrimSuffix(srcpath, global.ZetsuSourceCodeFileExtention)
 
 	if err, errtype, errors := generator.Generate(srcpath, dstpath, goos, goarch, release); err != nil {
 		switch errtype {

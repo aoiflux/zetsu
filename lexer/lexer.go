@@ -24,7 +24,7 @@ func New(input string) *Lexer {
 
 // NextToken method makes use of lexer data structure
 // Uses switch cases to identify whether a certain character
-// in source code is legal or not. Mutant language only
+// in source code is legal or not. Zetsu language only
 // supports ascii characters
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token

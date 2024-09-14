@@ -5,6 +5,7 @@ import (
 	"encoding/gob"
 	"io"
 	"os"
+	"zetsu/builtin"
 	"zetsu/compiler"
 	"zetsu/errrs"
 	"zetsu/global"
@@ -81,7 +82,7 @@ func registerTypes() {
 	gob.Register(&object.Error{})
 	gob.Register(&object.Function{})
 	gob.Register(&object.String{})
-	gob.Register(&object.BuiltIn{})
+	gob.Register(&builtin.BuiltIn{})
 	gob.Register(&object.Array{})
 	gob.Register(&object.Hash{})
 	gob.Register(&object.Quote{})

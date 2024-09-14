@@ -5,6 +5,7 @@ import (
 	"encoding/gob"
 	"fmt"
 	"os"
+	"zetsu/builtin"
 	"zetsu/compiler"
 	"zetsu/errrs"
 	"zetsu/global"
@@ -40,7 +41,7 @@ func Generate(srcpath, dstpath, goos, goarch string, release bool) (error, errrs
 		return nil, "", nil
 	}
 
-	if err := os.WriteFile(dstpath+global.MutantByteCodeCompiledFileExtension, bytecode, 0644); err != nil {
+	if err := os.WriteFile(dstpath+global.ZetsuByteCodeCompiledFileExtension, bytecode, 0644); err != nil {
 		return err, errrs.ERROR, nil
 	}
 
@@ -50,7 +51,7 @@ func Generate(srcpath, dstpath, goos, goarch string, release bool) (error, errrs
 func compile(data []byte) ([]byte, error, errrs.ErrorType, []string) {
 	constants := []object.Object{}
 	symbolTable := compiler.NewSymbolTable()
-	for i, v := range object.Builtins {
+	for i, v := range builtin.Builtins {
 		symbolTable.DefineBuiltin(i, v.Name)
 	}
 
@@ -108,7 +109,7 @@ func registerTypes() {
 	gob.Register(&object.Error{})
 	gob.Register(&object.Function{})
 	gob.Register(&object.String{})
-	gob.Register(&object.BuiltIn{})
+	gob.Register(&builtin.BuiltIn{})
 	gob.Register(&object.Array{})
 	gob.Register(&object.Hash{})
 	gob.Register(&object.Quote{})
