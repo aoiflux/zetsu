@@ -40,11 +40,11 @@ func main() {
 			fmt.Println("\t\tShow version information.")
 			fmt.Println()
 
-			fmt.Println("\tzetsu <FILENAME>.mut")
+			fmt.Println("\tzetsu <FILENAME>.zeta")
 			fmt.Println("\t\tCompile zetsu source code into zetsu bytecode.")
 			fmt.Println()
 
-			fmt.Println("\tzetsu <FILENAME>.mu")
+			fmt.Println("\tzetsu <FILENAME>.ze")
 			fmt.Println("\t\tRun zetsu bytecode using zetsu VM.")
 			fmt.Println()
 
@@ -75,7 +75,7 @@ func main() {
 	}
 
 	if len(os.Args) >= 2 && os.Args[1] == RELEASECMD {
-		src, goos, goarch, err := prepareRelease(os.Args)
+		src, goos, goarch, err := prepareRelease()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -87,7 +87,7 @@ func main() {
 	}
 }
 
-func prepareRelease(args []string) (string, string, string, error) {
+func prepareRelease() (string, string, string, error) {
 	var goos, goarch, src string
 
 	releasecmd := flag.NewFlagSet(RELEASECMD, flag.ExitOnError)
