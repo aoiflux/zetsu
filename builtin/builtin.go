@@ -25,7 +25,7 @@ var Builtins = []struct {
 	{"rest", &BuiltIn{Rest}},
 	{"push", &BuiltIn{Push}},
 	{"pop", &BuiltIn{Pop}},
-	{"exfat_GetFiles", &BuiltIn{exfat.GetFiles}},
+	{"exfat.GetFiles", &BuiltIn{exfat.GetFiles}},
 }
 
 func GetBuiltinByName(name string) *BuiltIn {

@@ -11,5 +11,5 @@ var builtins = map[string]*builtin.BuiltIn{
 	"rest":           builtin.GetBuiltinByName("rest"),
 	"push":           builtin.GetBuiltinByName("push"),
 	"puts":           builtin.GetBuiltinByName("puts"),
-	"exfat_GetFiles": builtin.GetBuiltinByName("exfat_GetFiles"),
+	"exfat.GetFiles": builtin.GetBuiltinByName("exfat.GetFiles"),
 }
