@@ -2,6 +2,7 @@ package builtin
 
 import (
 	"fmt"
+	"zetsu/builtin/exfat"
 	"zetsu/object"
 )
 
@@ -24,6 +25,7 @@ var Builtins = []struct {
 	{"rest", &BuiltIn{Rest}},
 	{"push", &BuiltIn{Push}},
 	{"pop", &BuiltIn{Pop}},
+	{"exfat.GetFiles", &BuiltIn{exfat.GetFiles}},
 }
 
 func GetBuiltinByName(name string) *BuiltIn {
