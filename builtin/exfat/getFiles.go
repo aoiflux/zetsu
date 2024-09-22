@@ -34,6 +34,7 @@ func GetFiles(args ...object.Object) object.Object {
 	if err != nil {
 		return newError("unable to read file. got error: %s", err.Error())
 	}
+	defer fh.Close()
 
 	offset := int64(0)
 	if len(args) == 2 {
