@@ -18,6 +18,7 @@ const (
 	COMPILED_FN_OBJ  = "COMPILED_FN_OBJ"
 	CLOSURE_OBJ      = "CLOSURE"
 	ENCRYPTED_OBJ    = "ENCRYPTED"
+	PACKET_OBJ       = "PACKET"
 )
 
 type Object interface {
