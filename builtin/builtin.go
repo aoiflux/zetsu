@@ -2,6 +2,7 @@ package builtin
 
 import (
 	"fmt"
+	pcapng "zetsu/builtin/pcapng"
 	"zetsu/object"
 )
 
@@ -24,6 +25,7 @@ var Builtins = []struct {
 	{"rest", &BuiltIn{Rest}},
 	{"push", &BuiltIn{Push}},
 	{"pop", &BuiltIn{Pop}},
+	{"pcapng_parse", &BuiltIn{pcapng.ParsePcap}},
 }
 
 func GetBuiltinByName(name string) *BuiltIn {
