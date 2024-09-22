@@ -11,11 +11,11 @@ import (
 // ParsePcap reads and processes packets from a pcap file
 func ParsePcap(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("wrong number of arguments. got=%d, want=1 or 2", len(args))}
+		return &object.Error{Message: fmt.Sprintf("wrong number of arguments. got=%d, want=1", len(args))}
 	}
 
 	if args[0].Type() != object.STRING_OBJ {
-		return &object.Error{Message: fmt.Sprintf("first argument to `GetFiles` must be STRING, got=%s", args[0].Type())}
+		return &object.Error{Message: fmt.Sprintf("first argument to `ParsePcap` must be STRING, got=%s", args[0].Type())}
 	}
 
 	handle, err := pcap.OpenOffline(args[0].Inspect())
