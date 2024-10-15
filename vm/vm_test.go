@@ -41,7 +41,7 @@ func runVMTests(t *testing.T, tests []vmTestCase) {
 			fmt.Println()
 		}
 
-		byteCode = mutil.EncryptByteCode(byteCode)
+		mutil.EncryptByteCode(byteCode)
 
 		vm := New(comp.ByteCode())
 		if err := vm.Run(); err != nil {
@@ -58,6 +58,20 @@ func parse(input string) *ast.Program {
 	p := parser.New(l)
 
 	return p.ParseProgram()
+}
+
+func testFoatObject(expected float64, actual object.Object) error {
+	result, ok := actual.(*object.Float)
+
+	if !ok {
+		return fmt.Errorf("object is not Float. got=%T (%+v)", actual, actual)
+	}
+
+	if result.Value != expected {
+		return fmt.Errorf("object has wrong value. got=%g, want=%g", result.Value, expected)
+	}
+
+	return nil
 }
 
 func testIntegerObject(expected int64, actual object.Object) error {
@@ -103,6 +117,10 @@ func testStringObject(expected string, actual object.Object) error {
 func testExpectedObject(t *testing.T, expected interface{}, actual object.Object) {
 	t.Helper()
 	switch expected := expected.(type) {
+	case float64:
+		if err := testFoatObject(expected, actual); err != nil {
+			t.Errorf("testFloatObject failed: %s", err)
+		}
 	case int:
 		if err := testIntegerObject(int64(expected), actual); err != nil {
 			t.Errorf("testIntegerObject failed: %s", err)
@@ -163,6 +181,18 @@ func testExpectedObject(t *testing.T, expected interface{}, actual object.Object
 			t.Errorf("wrong error message. expected:%q, got:%q", expected.Message, errObj.Message)
 		}
 	}
+}
+
+func TestFloatArithmatic(t *testing.T) {
+	tests := []vmTestCase{
+		{"1.5", 1.5},
+		{"-1.5", -1.5},
+		{"1.5 + 1.5", 3.0},
+		{"1.5 - 1.5", 0.0},
+		{"1.5 * 1.5", 2.25},
+		{"1.5 / 1.5", 1.0},
+	}
+	runVMTests(t, tests)
 }
 
 func TestIntegerArithmatic(t *testing.T) {

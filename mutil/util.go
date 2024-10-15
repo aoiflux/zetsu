@@ -3,6 +3,7 @@ package mutil
 import (
 	"encoding/binary"
 	"errors"
+	"math"
 	"strconv"
 	"strings"
 	"zetsu/compiler"
@@ -35,6 +36,17 @@ func EncryptObject(obj object.Object, length int) (object.Object, error) {
 	var err error
 
 	switch obj.Type() {
+	case object.FLOAT_OBJ:
+		val := obj.(*object.Float).Value
+		bite := make([]byte, 8)
+		binary.LittleEndian.PutUint64(bite, math.Float64bits(val))
+		bite = security.XOR(bite, length)
+
+		encObj = &object.Encrypted{
+			EncType: object.FLOAT_OBJ,
+			Value:   bite,
+		}
+
 	case object.INTEGER_OBJ:
 		val := obj.(*object.Integer).Value
 		bite := make([]byte, 8)
@@ -83,6 +95,10 @@ func DecryptObject(obj object.Object, length int) (object.Object, error) {
 		bite = security.XOR(bite, length)
 
 		switch decObj.(*object.Encrypted).EncType {
+		case object.FLOAT_OBJ:
+			val := binary.LittleEndian.Uint64(bite)
+			decObj = &object.Float{Value: math.Float64frombits(val)}
+
 		case object.INTEGER_OBJ:
 			val := binary.LittleEndian.Uint64(bite)
 			decObj = &object.Integer{Value: int64(val)}
@@ -104,4 +120,15 @@ func DecryptObject(obj object.Object, length int) (object.Object, error) {
 
 	err = errors.New("wrong obj type")
 	return obj, err
+}
+
+// AssertObjectTypes checks if the given input type is one of the expected object types.
+// It returns true if the input type matches any of the expected types, false otherwise.
+func AssertObjectTypes(inType string, objTypes ...string) bool {
+	for _, objType := range objTypes {
+		if objType == inType {
+			return true
+		}
+	}
+	return false
 }
