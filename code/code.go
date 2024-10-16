@@ -55,6 +55,7 @@ var definitions = map[Opcode]*Definition{
 	OpAdd:            {"OpAdd", []int{}},
 	OpSub:            {"OpSub", []int{}},
 	OpMul:            {"OpMul", []int{}},
+	OpMod:            {"OpMod", []int{}},
 	OpDiv:            {"OpDiv", []int{}},
 	OpTrue:           {"OpTrue", []int{}},
 	OpFalse:          {"OpFalse", []int{}},

@@ -50,6 +50,8 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.FSLASH, l.ch)
 	case '\\':
 		tok = newToken(token.FSLASH, l.ch)
+	case '%':
+		tok = newToken(token.MODULO, l.ch)
 	case '<':
 		tok = newToken(token.LT, l.ch)
 	case '>':

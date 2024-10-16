@@ -24,6 +24,7 @@ const (
 	MINUS      = "-"
 	ASTERISK   = "*"
 	FSLASH     = "/"
+	MODULO     = "%"
 	BSLASH     = "\\"
 	LT         = "<"
 	GT         = ">"
