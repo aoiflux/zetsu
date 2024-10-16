@@ -91,8 +91,13 @@ func (l *Lexer) NextToken() token.Token {
 			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
 		} else if unicode.IsNumber(l.ch) {
-			tok.Literal = l.readNumber()
-			tok.Type = token.INT
+			val, isFloat := l.readNumber()
+			tok.Literal = val
+			if isFloat {
+				tok.Type = token.FLOAT
+			} else {
+				tok.Type = token.INT
+			}
 			return tok
 		}
 		tok = newToken(token.ILLEGAL, l.ch)
@@ -103,6 +108,15 @@ func (l *Lexer) NextToken() token.Token {
 	return tok
 }
 
+func (l *Lexer) prevRune() rune {
+	var prev rune
+	if l.readPosition >= len(l.input) {
+		prev = 0
+	} else {
+		prev = rune(l.input[l.readPosition-2])
+	}
+	return prev
+}
 func (l *Lexer) readRune() {
 	if l.readPosition >= len(l.input) {
 		l.ch = 0
@@ -112,6 +126,15 @@ func (l *Lexer) readRune() {
 
 	l.position = l.readPosition
 	l.readPosition++
+}
+func (l *Lexer) nextRune() rune {
+	var next rune
+	if l.readPosition >= len(l.input) {
+		next = 0
+	} else {
+		next = rune(l.input[l.readPosition])
+	}
+	return next
 }
 
 func (l *Lexer) readString() string {
@@ -142,12 +165,22 @@ func (l *Lexer) readIdentifier() string {
 	return l.input[position:l.position]
 }
 
-func (l *Lexer) readNumber() string {
+func (l *Lexer) readNumber() (string, bool) {
 	position := l.position
-	for unicode.IsDigit(l.ch) {
+	flag := false
+	for unicode.IsDigit(l.ch) || l.ch == '.' {
+		if l.ch == '.' {
+			flag = true
+			prev := l.prevRune()
+			next := l.nextRune()
+			if !(unicode.IsDigit(prev) && unicode.IsDigit(next)) {
+				break
+			}
+		}
+
 		l.readRune()
 	}
-	return l.input[position:l.position]
+	return l.input[position:l.position], flag
 }
 
 func (l *Lexer) skipWhiteSpace() {

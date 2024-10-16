@@ -75,6 +75,7 @@ func runvm(bytecode *compiler.ByteCode) (error, errrs.ErrorType) {
 }
 
 func registerTypes() {
+	gob.Register(&object.Float{})
 	gob.Register(&object.Integer{})
 	gob.Register(&object.Boolean{})
 	gob.Register(&object.Null{})
