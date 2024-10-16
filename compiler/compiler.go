@@ -116,6 +116,8 @@ func (c *Compiler) Compile(node ast.Node) error {
 			c.emit(code.OpMul)
 		case "/":
 			c.emit(code.OpDiv)
+		case "%":
+			c.emit(code.OpMod)
 		case ">":
 			c.emit(code.OpGreater)
 		case "==":

@@ -2,6 +2,7 @@ package vm
 
 import (
 	"fmt"
+	"math"
 	"zetsu/builtin"
 	"zetsu/code"
 	"zetsu/compiler"
@@ -77,7 +78,7 @@ func (vm *VM) Run() error {
 			if err := vm.execMinusOperation(); err != nil {
 				return err
 			}
-		case code.OpAdd, code.OpSub, code.OpMul, code.OpDiv:
+		case code.OpAdd, code.OpSub, code.OpMul, code.OpDiv, code.OpMod:
 			if err := vm.execBinaryOperation(op); err != nil {
 				return err
 			}
@@ -313,6 +314,8 @@ func (vm *VM) execBinaryFloatOperation(op code.Opcode, left, right object.Object
 		result = lval * rval
 	case code.OpDiv:
 		result = lval / rval
+	case code.OpMod:
+		result = math.Mod(lval, rval)
 	default:
 		return fmt.Errorf("Unknown float operator: %d", op)
 	}
@@ -334,6 +337,8 @@ func (vm *VM) execBinaryIntegerOperation(op code.Opcode, left, right object.Obje
 		result = lval * rval
 	case code.OpDiv:
 		result = lval / rval
+	case code.OpMod:
+		result = lval % rval
 	default:
 		return fmt.Errorf("Unknown integer operator: %d", op)
 	}
